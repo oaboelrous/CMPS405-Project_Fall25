@@ -32,13 +32,12 @@ file_name=$(basename "$gz_file")
 
 # Step 6: Run the server script using SSH
 file_name=$(basename "$gz_file")  
-remote_script="/home/yazan-server-vm/srv_access_accept.sh"
+remote_script="~/Desktop/CMPS405-Project_Fall25/server/srv_access_accept.sh"
 
 # using variables such as: client_user='$client_user' to assign these variables on the server side and can use them later (on the server side)
 # bash to run the script (srv_access_accept.sh) on the server side
 # Using "" means this will run on the server side 
-response=$(ssh "$server_host" 
-  "client_user='$client_user' access_code='$access_code' fname='$file_name' bash '$remote_script'")
+response=$(ssh "$server_host" "client_user='$client_user' access_code='$access_code' fname='$file_name' bash '$remote_script'")
 
 
 # -----------------------

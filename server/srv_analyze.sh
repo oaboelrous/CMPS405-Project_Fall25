@@ -17,6 +17,8 @@ do
 	for request_file in "$queue_folder"/*.req
 	do
 	
+		# Check if any .req files actually exist (in case glob doesn't match anything)
+		[ -f "$request_file" ] || continue
 	
 		# Because we have to calculate the time for processing 
 		start_time=$(date +%s%3N) #To get time in milisconds, first we need to get it in nanaoseoncds and then get the first 3 numbers of it
@@ -68,7 +70,7 @@ do
 		
 		
 		
-		process_time_UTC=$(date -u +"%Y-%m-%d time %H:%M:%SZ")
+		process_time_UTC=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 		
 		
 		# Write the results for for ~/results/RES_<ID>.txt
@@ -91,7 +93,7 @@ do
 		
 		
 		# Now append to  ~/logs/worker.log 
-		echo "${process_time_UTC} ID=${ID} CLIENT_USER=${client_user} DURATION=${duration} PAYLOAD=${payload_file}" >> ~/logs/worker.log
+		echo "${process_time_UTC} ID=${ID} CLIENT_USER=${client_user} DURATION_MS=${duration} PAYLOAD=${payload_file}" >> ~/logs/worker.log
 		
 		
 		

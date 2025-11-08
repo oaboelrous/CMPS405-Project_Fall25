@@ -5,7 +5,7 @@
 
 # First I need to check that the number of arguments equals to 1
 # Here $# means the number of arguments 
-if [ $# -nq 1 ]; then
+if [ $# -ne 1 ]; then
 	
 	echo "Error! enter exactly 1 argument"
 	exit 1	
@@ -24,7 +24,7 @@ server="$1"
  TIMESTAMP=$(date -u +"%Y%m%d_%H%M%S")
  
  # Create the metric file name
- METRIC_FILE="/home/yazan/tmp/metrics_${TIMESTAMP}.txt"
+ METRIC_FILE="~/tmp/metrics_${TIMESTAMP}.txt"
  
  
  
@@ -33,22 +33,22 @@ server="$1"
 
 # 1- hostname and UTC time
 hostname=$(hostname)
-UTC_time=$(date -u+"Date: %d/%m/%Y Time: %H:%M:%S")
+UTC_time=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 
 # 2- get the load average (how busy the system is / how many processes are waiting for the cpu)
 
 # uptime will give you the load average and other extra information, we need only the load average which is the last part
 # after running uptime use awk (text tool) with the -F argument (split by filed which is specified by "load average:") then use print $2 (to print the second part) 
-load_avg=$(uptime | awk -F'load average: { print $2 }')
+load_avg=$(uptime | awk -F'load average:' '{ print $2 }')
 
 
 # 3- free will give you the memory usage in 2 rows, first row --> Mem: (which we need and use grep to get it) and will also give you 6 columns (we need the second column which is the used) so use awk and get the second part
-memory_usage=$(free | grep Mem: | awk '{ print $2 }')
+memory_usage=$(free | grep Mem: | awk '{ print $3 }')
 
 
 # 4- To get processes use ps and specify to get only the (pid and cmd which is the name of the proccess) and then run the command head (by default will give you the first 10 lines) use -n 6 to get the first 5 and the header  
-top_processes=$(ps -eo pid,cmd | head -n 6)
+top_processes=$(ps -eo pid,cmd --sort=-%cpu | head -n 6)
 
 
 # Step 4: Print the vaules from the top vaiables and store them in the metric file

@@ -2,7 +2,7 @@
 
 
 # Step 1: prepare the worker file
-worker_file="~/log/worker.log"
+worker_file=~/logs/worker.log
 
 
 # Get the archive folder for easier use
@@ -13,7 +13,7 @@ archive_folder=~/archive
 
 if [ ! -f "$worker_file" ]; then
 	
-	echo "log/worker.log does not exists"
+	echo "logs/worker.log does not exists"
 	exit 1
 fi
 
@@ -23,21 +23,21 @@ job_number=$(wc -l < "$worker_file")
 
 # Step 3: Get the durations time
 # This will get you all durations form the worker file
-durations=$(awk -F'DURATION_MS=' '{print $2}' "$worker_file")
+durations=$(awk -F'DURATION_MS=' '{print $2}' "$worker_file" | awk '{print $1}')
 
 
 
 # Step 4: Sum all durations 
 total_durations=0
-for duration in $total_durations; do
-	total_durations=((total_durations + duration))
+for duration in $durations; do
+	total_durations=$((total_durations + duration))
 done
 
 
 
 # Step 5: Get the average 
 # Avoid dividing by 0
-if [ total_durations -gt 0 ]; then 
+if [ $job_number -gt 0 ]; then 
 	average_duration=$((total_durations / job_number))
 	
 else
@@ -79,7 +79,7 @@ old_logs=$(find ~/logs/ -type f -name '*.log' -mtime +7)
 
 
 
-for log_file in "$old_logs"; do
+for log_file in $old_logs; do
 
 	gzip "$log_file"
 	mv "$log_file.gz" "$archive_folder" # Because gzip will give you worker.log.gz and delete worker.log so to move it you need to add .gz 

@@ -11,6 +11,9 @@ do
 read -p "Enter a hostname: " host
 done
 
+
+mkdir -p ~/logs
+
 #the ping workflow
 #we ping the host (while hiding all the output for a cleaner terminal)
 #then take the exit code to determine if successful and change the status based on it
@@ -28,7 +31,7 @@ fi
 host_ip=$(ping -c1 "$host" 2>/dev/null | awk -F'[()]' '/PING/{print $2}')
 
 #same workflow as ping
-nc -z "$host_ip" 22
+nc -z -w 3 "$host_ip" 22
 ssh_open=$?
 if [ "$ssh_open" -eq 0 ]
 then 

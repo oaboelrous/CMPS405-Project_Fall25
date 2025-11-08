@@ -17,7 +17,7 @@ allowList=~/tokens/allowlist.txt
 
 # If the access code is not in the allow list file exit
 
-if [ ! grep "$access_code" "$allowList" ]; then
+if ! grep -q "$access_code" "$allowList"; then
 	
 	echo "REJECT invalid_token"
 	exit 1
@@ -27,7 +27,7 @@ fi
 # $RANDOM will give you a random 4 digits number 
 REQ_ID="REQ_$(date +%Y%m%d_%H%M%S)_$RANDOM"
 
-mkdir ~/queue
+mkdir -p ~/queue
 
 # Fourth: Now we need to create the request file
 # 1- Create a variable that hold the path that from REQ_ID to make the request file
@@ -44,9 +44,9 @@ echo "ID=$REQ_ID" > "$request_file"
 
 # Now use >> to append and not overwrites 
 echo "CLIENT_USER=$client_user" >> "$request_file"
-echo "CREATED_UTC=$(date -u +"%Y-%m-%dT%H:%M:%S")" >> "$request_file"
-echo "PAYLOAD_FILE=${request_file}.payload" >> "$request_file"
-echo "FILENAME=$fname"
+echo "CREATED_UTC=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$request_file"
+echo "PAYLOAD_FILE=~/queue/${REQ_ID}.payload" >> "$request_file"
+echo "FILENAME=$fname" >> "$request_file"
 
 
 # Sixth: send verification to the client 

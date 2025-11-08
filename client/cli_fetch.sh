@@ -14,9 +14,9 @@ fi
 
 
 # Step 2: Check if result file exists on server
-result_path="~/results/RES_${req_id}.txt" # the path of the result file (in the server side)
-request_path="~/queue/RES_${req_id}.req" # the path of the request file (in the server side)
-payload_path="~/queue/RES_${req_id}.payload" # the path of the payload file (in the server side)
+result_path="\$HOME/results/RES_${req_id}.txt" # the path of the result file (in the server side)
+request_path="\$HOME/queue/${req_id}.req" # the path of the request file (in the server side)
+payload_path="\$HOME/queue/${req_id}.payload" # the path of the payload file (in the server side)
 
 
 # Step 3: Check if the result file exitsts
@@ -28,7 +28,7 @@ result_exitst=$? # $? will return the exit code of the last command that was run
 if [ $result_exitst -eq 0 ]; then
 	
 	# Step 4: Copy the result file from the server to the client 
-	scp "$server_host:$result_path" "~/S25-01/results/${req_id}.txt"
+	scp "$server_host:$result_path" ~/results/${req_id}.txt
 	
 	# Step 5: Print confirmation
 	echo "READY results/${req_id}.txt"

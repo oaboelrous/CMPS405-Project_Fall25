@@ -21,7 +21,7 @@ do
 chmod 700 "$file"
 ((counter++))
 
-echo "fixed: "${file}"" 777-\>700 | tee -a perm_changes.log
+echo "fixed:${file} 777->700" | tee -a perm_changes.log
 #echo "fixed: "${file}"" 777-\>700
 #echo "summary: changed=${counter}"
 #fi

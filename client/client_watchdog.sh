@@ -10,8 +10,8 @@ utc_ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 load=$(awk '{print $1,$2,$3}' /proc/loadavg)
 memory=$(free -m | awk '/Mem:/ {print $3"/"$2"MB"}')
 
-echo [$utc_ts] load=$load
-echo mem_used = $memory
+echo "[$utc_ts] load=$load"
+echo "mem_used=$memory"
 
 #this conditional to prvent sleeping on the last iteration
 if [ $i -lt $runs ];
@@ -21,7 +21,7 @@ fi
 
 done
 
-echo "done (loops = ${runs})"
+echo "done (loops=${runs})"
 #echo "mem_used=$memory"
 #echo $utc_ts
 #echo $load
